@@ -1,5 +1,9 @@
 # 2020 Opioid Data Hackathon
 
+> 📢: See this page with a table of contents at https://codeforphilly.github.io/datahack2020/.
+
+> 💬: Be sure to join the #data-hack-chat channel of [Code for Philly's Slack](https://codeforphilly.org/chat).
+
 ## Description
 
 [Code for Philly](https://codeforphilly.org/), [DataPhilly](https://www.meetup.com/DataPhilly/), [R Ladies Philly](https://www.rladiesphilly.org/), the [Philly Data Jawn](https://www.phillydatajawn.com/), [Health Federation of Philadelphia](http://www.healthfederation.org), [Prevention Point](http://www.ppponline.org), the [City of Philadelphia](https://www.phila.gov/programs/combating-the-opioid-epidemic/) are hosting a data science hackathon to answer pertinent questions around the Opioid Crisis in Philadelphia. The goals of this event are to provide health organizations with insights that may normally be unavailable to them and to create analyses that help inform the public about the opioid epidemic in our city.
@@ -65,47 +69,82 @@ Each team is expected to submit a final report, that will follow the structure b
 
 ### Datasets and Codebooks
 
-- table name in DB: "PhysicianLocator_Test"
-- description: Practitioners authorized to treat opioid dependency with buprenorphine ([view data source](https://www.samhsa.gov/medication-assisted-treatment/practitioner-program-data/treatment-practitioner-locator))
-- [codebook for PhysicianLocator_Test](/codebooks/Codebook_PhysicianLocator_Test.pdf)
+> 📢: Visit the [codebooks section](https://github.com/CodeForPhilly/datahack2020/tree/master/codebooks) for a detailed list of database data.
 
-- Data from Prevention Point
-- [State Population Totals and Components of Change: 2010-2018](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html#par_textimage_1873399417)
-- [Overdose Information Network Data CY January 2018 - Current Monthly County State Police](https://data.pa.gov/Opioid-Related/Overdose-Information-Network-Data-CY-January-2018-/hbkk-dwy3)
-- [Opioid Data Analysis and Resources](https://www.cdc.gov/drugoverdose/data/analysis.html)
+Other userful data sources:
 
-### How to access the data
+- [Census.gov: State Population Totals and Components of Change: 2010-2018](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html#par_textimage_1873399417)
+- [PA.gov: Overdose Information Network Data CY January 2018 - Current Monthly County State Police](https://data.pa.gov/Opioid-Related/Overdose-Information-Network-Data-CY-January-2018-/hbkk-dwy3)
+- [CDC: Opioid Data Analysis and Resources](https://www.cdc.gov/drugoverdose/data/analysis.html)
 
-1. Log into Code for Philly Slack and join channel #data-hack-chat -> database username and password are a pinned topic in there
-2. Using R: 
+### Access the data in R
 
-    Option 1: 
-    
-    - [Install RStudio](https://rstudio.com/products/rstudio/download/)
-    - New Project -> Version Control -> Git -> Repository URL: https://github.com/CodeForPhilly/datahack2020.git (make sure you choose your preferred project directory, and then click "Create Project")
-    - Set 2 system variables to allow access to the database; type this in the Console: 
-    
+First, log into Code for Philly Slack and join channel #data-hack-chat -> database username and password are a pinned topic in there
+
+#### Option 1: 
+
+- [Install RStudio](https://rstudio.com/products/rstudio/download/)
+- New Project -> Version Control -> Git -> Repository URL: https://github.com/CodeForPhilly/datahack2020.git (make sure you choose your preferred project directory, and then click "Create Project")
+- Set 2 system variables to allow access to the database; type this in the Console: 
+
     ```
     Sys.setenv(DATAHACK_DB_USER = "reader") 
     Sys.setenv(DATAHACK_DB_PASS = "[pwd]") # replace [pwd] with the the password you got from the Slack channel
-    
+
     ```
-    - Run the script /home/connect_to_db_rstudio.Rmd; if you get authentication errors, set the environment variables again via the code above. 
-    
-    Option 2: Rocker
-    
-    - [Install Docker](https://docs.docker.com/install/)
-    - Via Docker Quickstart Terminal, cd to ~/datahack2020/docker
-    - Run: 
-    
-    ```
-    docker-compose up
-    ```
-    - When that is done processing, open a browser and go to: 192.168.99.100:8787 (on Windows) or localhost:8787 (on Mac) (if this doesn't work, open up another Docker Quistart Terminal and see what IP is listed there; use that IP address instead of 192.168.99.100)
-    - When asked for username and pwd, enter rstudio/datahack
-    - Run the 2 Sys.setenv commands from above
-    - Run the script /home/connect_to_db_rstudio.Rmd
-    
+- Run the script /home/connect_to_db_rstudio.R; if you get authentication errors, set the environment variables again via the code above. 
+
+#### Option 2: Rocker
+
+- [Install Docker](https://docs.docker.com/install/)
+- Via Docker Quickstart Terminal, cd to ~/datahack2020/docker
+- Run: 
+
+```
+docker-compose up
+```
+- When that is done processing, open a browser and go to: 192.168.99.100:8787 (on Windows) or localhost:8787 (on Mac) (if this doesn't work, open up another Docker Quistart Terminal and see what IP is listed there; use that IP address instead of 192.168.99.100)
+- When the Rstudio in your browser asks for credentials: username = rstudio, password = datahack
+- Run the 2 Sys.setenv commands from above
+- Run the script /home/connect_to_db_rstudio.Rmd
+
+### Access the data in Python
+
+#### Option 1:
+
+1. Install these packages
+
+```
+pip install SQLAlchemy python-dotenv
+```
+
+2. Create a file in `/home` named `.env`, with..
+
+```
+DATAHACK_DB_USER=reader
+DATAHACK_DB_PASS=[PASSWORD WE WILL SEND YOU]
+```
+
+3. Run the notebook [test_notebook.ipynb](/home/test_notebook.ipynb)
+
+
+#### Option 2: Jupyter Stacks
+
+Here is a [2 minute screencast of this approach, with unfortunately no sound](https://v.usetapes.com/GlsLP4I8LB).
+
+- [Install Docker](https://docs.docker.com/install/)
+- Via Docker Quickstart Terminal, cd to ~/datahack2020/docker
+- Run: 
+```
+docker-compose up
+```
+- When that is done processing, open a browser and go to: 192.168.99.100:8999 (on Windows) or localhost:8999 (on Mac) (if this doesn't work, open up another Docker Quistart Terminal and see what IP is listed there; use that IP address instead of 192.168.99.100)
+- Open the file `_env` and set your credentials. Rename it to `.env`
+- Run the notebook `/home/test_notebook.ipynb`
+
+
+
+https://v.usetapes.com/GlsLP4I8LB
     
 ## Collaborating using Git: Guidelines
 
@@ -115,12 +154,12 @@ Each team is expected to submit a final report, that will follow the structure b
 
 To contribute, you will need to:
 
-- Fork the repo (optional)
-- Clone the repo
-- Create a new branch (branch names should have descriptive names and should end with your initials, eg. if Party Parrot is in Team 2 and is working on a network analysis, she would create a branch under the folder /analyses/team02 and call it "network_analysis_pp")
+- Fork the repo (required)
+- Create a new branch in your forked repo (branch names should have descriptive names and should end with your initials, eg. if Party Parrot is in Team 2 and is working on a network analysis, she would create a branch under the folder /analyses/team02 and call it "team02_network_analysis_pp")
+- Clone the repo to your machine
 - Do work in your branch
-- When ready, commit and push all your changes to GitHub
-- When ready, make a pull request to the upstream repo (this will notify admins to review your pull request before merging it into master)
+- When ready, commit and push all your changes to the fork (or your team's fork if you're all working off of one fork) in GitHub
+- When ready, make a pull request to the Code for Philly repo (this will notify admins to review your pull request before merging it into master); NOTE: when making a pull request to the Code for Philly repo, you MUST include your team name, either in the branch of origin, the pull request title or description; if we can't easily figure out which team the pull request belongs to, we will have to send it back for this info to be added (this will allow us to more easily make sure teams only push work to their team's folder)
 
 ## Additional information
 
